@@ -6,10 +6,10 @@ from scipy.signal import argrelextrema
 import math
 
 from pytube import YouTube
-import whisper
+import pywhisper
 import pandas as pd
 from transformers import pipeline
-
+from pathlib import Path
 # Get the transcription of the video
 
 
@@ -19,8 +19,10 @@ def get_transcription(video_url):
     title = streams[0].title
     print(title)
     audio_file = streams.filter(only_audio=True).first().download(filename=r"audio_files\audio.mp4")
-    print(audio_file)
-    whisper_model = whisper.load_model("tiny")
+    # print(audio_file)
+    # audio_file = Path(audio_file)
+    # print(audio_file)
+    whisper_model = pywhisper.load_model("base")
     transcription = whisper_model.transcribe(audio_file)
 
     df = pd.DataFrame(transcription['segments'], columns=['start', 'end', 'text'])
